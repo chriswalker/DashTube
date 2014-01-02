@@ -1,7 +1,7 @@
 #### DashTube extension for DashClock
 
 DashTube is a simple extension for [DashClock](https://play.google.com/store/apps/details?id=net.nurik.roman.dashclock) that calls Transport For London's Line Status XML feed, and displays any lines with problems, together
-with the severity as returned by TfL.`V
+with the severity as returned by TfL.
 
 Some general notes:
 
@@ -20,7 +20,7 @@ To checkout and build DashTube in Android Studio:
 
      git clone https://github.com/chriswalker/dashtube.git ./DashTube
 
-##### Create dashtube.properties
+###### Create dashtube.properties
 
 For app signing, all signing-related info (keystore, pwd, alias, keystore pwd) are stored in a separate file, which is not committed to the repo.
 Assuming you have cloned the repo as described above, create a new file `DashTube/DashTube/dashtube.properties`, which contains the following keys:
