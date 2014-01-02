@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Values for the frequency list
+    <string-array name="frequency">
+        <item>Every 10 minutes</item>
+        <item>Every 15 minutes</item>
+        <item>Every 30 minutes</item>
+        <item>Every 45 minutes</item>
+        <item>Every hour</item>
+    </string-array>
+    <string-array name="frequency_values">
+        <item>600000</item>
+        <item>900000</item>
+        <item>1800000</item>
+        <item>2700000</item>
+        <item>3600000</item>
+    </string-array>
+    -->
+
+    <!--
+        Values for available tube lines
+    -->
+    <!-- move into strings -->
+    <string-array name="line_names">
+        <item>Bakerloo</item>
+        <item>Central</item>
+        <item>Circle</item>
+        <item>District</item>
+        <item>DLR</item>
+        <item>H&#8217;smith &amp; City</item>
+        <item>Jubilee</item>
+        <item>Metropolitan</item>
+        <item>Northern</item>
+        <item>Overground</item>
+        <item>Piccadilly</item>
+        <item>Victoria</item>
+        <item>W&#8217;loo &amp; City</item>
+    </string-array>
+    <integer-array name="line_codes">
+        <item>1</item> <!-- Bakerloo -->
+        <item>2</item> <!-- Central -->
+        <item>7</item> <!-- Circle -->
+        <item>9</item> <!-- District -->
+        <item>81</item> <!-- DLR -->
+        <item>8</item> <!-- Jubilee -->
+        <item>4</item> <!-- Jubilee -->
+        <item>11</item><!-- Metropolitan -->
+        <item>5</item> <!-- Northern -->
+        <item>82</item> <!-- Overground -->
+        <item>6</item> <!-- Piccadilly -->
+        <item>3</item> <!-- Victoria -->
+        <item>12</item> <!-- Waterloo & CIty -->
+    </integer-array>
+
+</resources>

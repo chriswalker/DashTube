@@ -1,0 +1,54 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.7.+'
+    }
+}
+
+apply plugin: 'android'
+
+repositories {
+    mavenCentral()
+}
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "18.1.0"
+
+    defaultConfig {
+        minSdkVersion 17
+        targetSdkVersion 19
+    }
+
+    // Seems long-winded way of doing this...
+    if (project.hasProperty('DashTube.properties') && new File(project.property('DashTube.properties')).exists()) {
+        Properties props = new Properties()
+        props.load(new FileInputStream(file(project.property('DashTube.properties'))))
+
+        signingConfigs {
+            release {
+                storeFile file(props['keystore'])
+                storePassword props['password']
+                keyAlias props['alias']
+                keyPassword props['keyPassword']
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            runProguard true
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+            proguardFile './proguard-dashtube.txt'
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+dependencies {
+    compile 'com.google.android.apps.dashclock:dashclock-api:+'
+    compile 'com.google.http-client:google-http-client-android:+'
+    compile 'com.google.api-client:google-api-client-xml:+'
+}

@@ -1,0 +1,10 @@
+# Needed by google-api-client to keep generic types and @Key annotations accessed via reflection
+-keepclassmembers class * {
+  @com.google.api.client.util.Key <fields>;
+}
+
+-keepattributes Signature,RuntimeVisibleAnnotations,AnnotationDefault
+
+# Make sure we leave anything extending GenericXml untouched, in order to
+# preserve empty constructors
+-keep public class * extends com.google.api.client.xml.GenericXml

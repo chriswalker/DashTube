@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/DashTube.iml" filepath="$PROJECT_DIR$/DashTube.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DashTube/DashTube-DashTube.iml" filepath="$PROJECT_DIR$/DashTube/DashTube-DashTube.iml" />
+    </modules>
+  </component>
+</project>
+
