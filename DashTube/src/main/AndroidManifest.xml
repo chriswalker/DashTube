@@ -39,7 +39,14 @@
             <meta-data android:name="worldReadable" android:value="true" />
             <meta-data android:name="description"
                        android:value="@string/extension_description" />
+            <meta-data android:name="settingsActivity"
+                       android:value=".DashTubeSettingsActivity" />
         </service>
+
+        <activity android:name=".DashTubeSettingsActivity"
+                  android:label="@string/settings_title"
+                  android:exported="true"
+                  android:icon="@drawable/ic_extension_dashtube"/>
 
     </application>
 
