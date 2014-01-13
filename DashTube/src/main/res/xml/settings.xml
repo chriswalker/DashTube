@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+        Frequency of status checks. Note the list preference's summary is set in code,
+        when the user selects a new frequency interval
+
+    <ListPreference android:dialogTitle="@string/frequency"
+        android:key="frequency"
+        android:defaultValue="3600000"
+        android:entries="@array/frequency"
+        android:entryValues="@array/frequency_values"
+        android:title="@string/frequency"
+        android:summary="@string/frequency"/>
+    -->
+    <!--
+        List of preferred lines to report on
+    -->
+    <!--<CheckBoxPreference android:key="all_lines"-->
+        <!--android:title="@string/all_lines"/>-->
+    <MultiSelectListPreference android:key="preferred_lines"
+        android:dialogTitle="@string/preferred_lines"
+        android:entries="@array/line_names"
+        android:entryValues="@array/line_codes"
+        android:title="@string/preferred_lines"
+        android:summary="@string/preferred_summary"/>
+
+    <!--
+            android:defaultValue="All"
+    -->
+
+</PreferenceScreen>
