@@ -16,6 +16,7 @@
 
 <resources>
     <string name="app_name">DashTube</string>
+    <string name="app_version">v1.1.0</string>
 
     <!-- URL for click intent -->
     <string name="tfl_tube_status_url">http://www.tfl.gov.uk/tfl/livetravelnews/realtime/tube/default.html</string>
@@ -25,8 +26,8 @@
     -->
 
     <!--
-        UI strings
-    -->
+      ~ UI strings
+      -->
 
     <!-- For the ExtensionData objects -->
     <string name="extension_title">DashTube</string>
@@ -40,5 +41,44 @@
     <!-- If connectivity is a problem -->
     <string name="error_status">&#x2014;</string>
     <string name="error_expanded_body">Could not retrieve line status</string>
+
+    <!--
+      ~ Settings activity
+      -->
+    <string name="settings_title">DashTube Settings</string>
+
+    <!-- Timer dialog box
+    <string name="frequency">Frequency of updates</string>
+    <string name="frequency_summary"></string> -->
+
+    <string name="all_lines">Report on all lines</string>
+
+    <!-- Preferred Lines dialog box -->
+    <string name="preferred_lines">Report on specific lines</string>
+    <string name="preferred_summary"></string>
+
+    <string name="about">About DashTube</string>
+    <string name="about_message">About message string in here, not too long eh?</string>
+    <string name="ok">OK</string>
+
+    <!--
+      ~  Menu strings
+      -->
+    <string name="menu_about">About</string>
+
+    <!--
+      ~ About dialog box
+      -->
+    <string name="about_dialog_text">
+        <![CDATA[
+        &#xa9; That Amazing Web Ltd. 2014.<br/>
+        All Rights Reserved.<br/><br/>
+        DashTube uses the following libraries:<br/><br/>
+        &#x2022; <a href="https://code.google.com/p/google-http-java-client/">Google HTTP Client Library for Java</a><br/>
+        &#x2022; <a href="https://code.google.com/p/google-api-java-client/">Google APIs Client Library for Java</a>
+        ]]>
+    </string>
+
+    <string name="ok_button">OK</string>
 
 </resources>
