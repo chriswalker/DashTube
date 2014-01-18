@@ -34,6 +34,7 @@
     <string name="extension_description">Displays a list of any London Underground lines experiencing delays.</string>
     <string name="status">Delays</string>
     <string name="expanded_title">Tube delays</string>
+    <string name="expanded_title_filtered">Tube delays (filtered)</string>
 
     <string name="line_status">%1$s &#x2013; %2$s</string>
     <string name="more_lines">&#x2192; %1$s more (tap for info)</string>
@@ -43,28 +44,33 @@
     <string name="error_expanded_body">Could not retrieve line status</string>
 
     <!--
-      ~ Settings activity
+      ~ Settings activity string
       -->
     <string name="settings_title">DashTube Settings</string>
 
-    <!-- Timer dialog box
-    <string name="frequency">Frequency of updates</string>
-    <string name="frequency_summary"></string> -->
+    <string name="preferred_lines">Check specific lines</string>
+    <string name="preferred_summary_none_selected">All underground lines</string>
 
-    <string name="all_lines">Report on all lines</string>
+    <string name="support_category">Support</string>
 
-    <!-- Preferred Lines dialog box -->
-    <string name="preferred_lines">Report on specific lines</string>
-    <string name="preferred_summary"></string>
+    <string name="play_store">Play Store</string> <!-- change -->
+    <string name="play_store_summary">Please rate DashTube!</string>
+    <!-- For the market/Play Store intent -->
+    <string name="market_url">market://details?id=com.taw.dashtube</string>
 
-    <string name="about">About DashTube</string>
-    <string name="about_message">About message string in here, not too long eh?</string>
-    <string name="ok">OK</string>
+    <string name="email">Email the developer</string>
+    <string name="email_summary">Email bug reports, suggestions, praise or complaints</string>
+    <!-- For the email intent -->
+    <string name="email_address">mailto:thatamazingweb@gmail.com</string>
 
     <!--
       ~  Menu strings
       -->
     <string name="menu_about">About</string>
+
+    <!--
+      ~ Preferred Lines dialog box
+      -->
 
     <!--
       ~ About dialog box
