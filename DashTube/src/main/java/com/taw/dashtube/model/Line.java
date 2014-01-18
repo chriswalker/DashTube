@@ -24,7 +24,7 @@ import com.google.api.client.xml.GenericXml;
  */
 public class Line extends GenericXml {
     @Key("@ID")
-    public int id;
+    public String id;
     @Key("@Name")
     public String name;
 }
