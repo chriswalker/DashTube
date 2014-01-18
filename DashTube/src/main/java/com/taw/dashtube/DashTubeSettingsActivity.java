@@ -16,52 +16,51 @@
 
 package com.taw.dashtube;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.MultiSelectListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
- * Created by chris on 10/12/2013.
+ * Preferences activity.
  */
-public class DashTubeSettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class DashTubeSettingsActivity extends PreferenceActivity {
 
     /**
      * A preference value change listener that updates the preference's summary to reflect its new
      * value.
      */
-//    private static Preference.OnPreferenceChangeListener prefsListener = new Preference.OnPreferenceChangeListener() {
-//        @Override
-//        public boolean onPreferenceChange(Preference preference, Object value) {
-//            String str = value.toString();
-//            if (preference instanceof MultiSelectListPreference) {
-//                MultiSelectListPreference multiPreference = (MultiSelectListPreference) preference;
-//                Set<String> selections = multiPreference.getValues();
-//                String summary = "";
-//                for (Iterator i = selections.iterator(); i.hasNext();) {
-//                    summary += i.next();
-//                    if (i.hasNext()) summary += " / ";
-//                }
-//                preference.setSummary(summary);
-//
-//            } else {
-//                // For all other preferences, set the summary to the value's
-//                // simple string representation.
-//                preference.setSummary(str);
-//            }
-//            return true;
-//        }
-//    };
+    private static Preference.OnPreferenceChangeListener prefsListener = new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object value) {
+            Set<String> selections = (Set<String>) value;
+            if (preference instanceof MultiSelectListPreference) {
+                MultiSelectListPreference multiPreference = (MultiSelectListPreference) preference;
+                List<String> sortedNames = new ArrayList<String>();
+
+                if (selections.size() > 0) {
+                    // Translate the selected IDs into strings first, so we can sort
+                    for (Iterator i = selections.iterator(); i.hasNext();) {
+                        sortedNames.add(DashTubeExtension.LINE_MAP.get(i.next()));
+                    }
+                    Collections.sort(sortedNames);
+                    String summary = TextUtils.join(", ", sortedNames);
+                    preference.setSummary(summary);
+                } else {
+                    preference.setSummary(preference.getContext().getString(R.string.preferred_summary_none_selected));
+                }
+
+            }
+            return true;
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +75,7 @@ public class DashTubeSettingsActivity extends PreferenceActivity implements Shar
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings);
-        //bindPreferenceSummaryToValue(findPreference(DashTubeExtension.PREFERRED_LINES));
+        bindPreferenceSummaryToValue(findPreference(DashTubeExtension.PREFERRED_LINES_PREF));
     }
 
     @Override
@@ -112,30 +111,15 @@ public class DashTubeSettingsActivity extends PreferenceActivity implements Shar
      *
      * @see #prefsListener
      */
-//    private static void bindPreferenceSummaryToValue(Preference preference) {
-//        // Set the listener to watch for value changes.
-//        preference.setOnPreferenceChangeListener(prefsListener);
-//
-//        // Trigger the listener immediately with the preference's
-//        // current value.
-//        prefsListener.onPreferenceChange(preference,
-//                PreferenceManager
-//                        .getDefaultSharedPreferences(preference.getContext())
-//                        .getStringSet(preference.getKey(), null));
-//    }
+    private static void bindPreferenceSummaryToValue(Preference preference) {
+        // Set the listener to watch for value changes.
+        preference.setOnPreferenceChangeListener(prefsListener);
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(DashTubeExtension.PREFERRED_LINES)) {
-            MultiSelectListPreference pref = (MultiSelectListPreference) findPreference(key);
-
-            Set<String> selections = pref.getValues();
-            String summary = "";
-            for (Iterator i = selections.iterator(); i.hasNext();) {
-                summary += i.next();
-                if (i.hasNext()) summary += " / ";
-            }
-            pref.setSummary(summary);
-        }
+        // Trigger the listener immediately with the preference's
+        // current value.
+        prefsListener.onPreferenceChange(preference,
+                PreferenceManager
+                        .getDefaultSharedPreferences(preference.getContext())
+                        .getStringSet(preference.getKey(), null));
     }
 }
