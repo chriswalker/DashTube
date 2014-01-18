@@ -1,32 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!--
+  ~ Copyright 2013 That Amazing Web Ltd.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <!--
-        Frequency of status checks. Note the list preference's summary is set in code,
-        when the user selects a new frequency interval
-
-    <ListPreference android:dialogTitle="@string/frequency"
-        android:key="frequency"
-        android:defaultValue="3600000"
-        android:entries="@array/frequency"
-        android:entryValues="@array/frequency_values"
-        android:title="@string/frequency"
-        android:summary="@string/frequency"/>
-    -->
-    <!--
-        List of preferred lines to report on
-    -->
-    <!--<CheckBoxPreference android:key="all_lines"-->
-        <!--android:title="@string/all_lines"/>-->
+      ~ List of preferred lines to report on
+      -->
     <MultiSelectListPreference android:key="preferred_lines"
         android:dialogTitle="@string/preferred_lines"
         android:entries="@array/line_names"
         android:entryValues="@array/line_codes"
         android:title="@string/preferred_lines"
-        android:summary="@string/preferred_summary"/>
+        android:defaultValue="@array/default_values"
+        android:summary="@string/preferred_summary_none_selected"/>
 
     <!--
-            android:defaultValue="All"
-    -->
+      ~ Support category - rate link, email
+      -->
+    <PreferenceCategory android:title="@string/support_category">
+        <Preference android:title="@string/play_store"
+            android:summary="@string/play_store_summary">
+            <intent android:action="android.intent.action.VIEW"
+                    android:data="@string/market_url" />
+        </Preference>
+        <Preference android:title="@string/email"
+            android:summary="@string/email_summary">
+            <intent android:action="android.intent.action.VIEW"
+                    android:data="@string/email_address" />
+        </Preference>
+    </PreferenceCategory>
 
 </PreferenceScreen>
