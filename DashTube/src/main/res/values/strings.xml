@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2013 That Amazing Web Ltd.
+  ~ Copyright 2013-2014 That Amazing Web Ltd.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -43,17 +43,33 @@
     <string name="error_status">&#x2014;</string>
     <string name="error_expanded_body">Could not retrieve line status</string>
 
+    <!-- Display string for tube names; used in the string array resources, and also in the Preferences activity -->
+    <string name="bakerloo">Bakerloo</string>
+    <string name="central">Central</string>
+    <string name="circle">Circle</string>
+    <string name="district">District</string>
+    <string name="dlr">DLR</string>
+    <string name="hsmith_and_city">H&#8217;smith &amp; City</string>
+    <string name="jubilee">Jubilee</string>
+    <string name="metropolitan">Metropolitan</string>
+    <string name="northern">Northern</string>
+    <string name="overground">Overground</string>
+    <string name="piccadilly">Piccadilly</string>
+    <string name="victoria">Victoria</string>
+    <string name="wloo_and_city">W&#8217;loo &amp; City</string>
+
     <!--
-      ~ Settings activity string
+      ~ Settings activity strings
       -->
     <string name="settings_title">DashTube Settings</string>
 
     <string name="preferred_lines">Check specific lines</string>
+    <string name="preferred_lines_dialog_title">Select up to five lines</string>
     <string name="preferred_summary_none_selected">All underground lines</string>
 
     <string name="support_category">Support</string>
 
-    <string name="play_store">Play Store</string> <!-- change -->
+    <string name="play_store">Play Store</string>
     <string name="play_store_summary">Please rate DashTube!</string>
     <!-- For the market/Play Store intent -->
     <string name="market_url">market://details?id=com.taw.dashtube</string>
@@ -67,10 +83,7 @@
       ~  Menu strings
       -->
     <string name="menu_about">About</string>
-
-    <!--
-      ~ Preferred Lines dialog box
-      -->
+    <string name="menu_changelog">Changelog</string>
 
     <!--
       ~ About dialog box
@@ -86,5 +99,20 @@
     </string>
 
     <string name="ok_button">OK</string>
+
+    <!--
+      ~ Changelog dialog box
+      -->
+    <string name="changelog">Changelog</string>
+    <string name="changelog_dialog_text">
+        <![CDATA[
+        <b>v1.1.0</b><br/>
+        &#x2022; Added preferences to allow filtering of up to five tube lines<br/>
+        &#x2022; Fixed bug in DashTube that meant line status was checked when tube is closed overnight<br/>
+        <br/>
+        <b>v1.0.0</b><br/>
+        &#x2022; Initial release
+        ]]>
+    </string>
 
 </resources>
