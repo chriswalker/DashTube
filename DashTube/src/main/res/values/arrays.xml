@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013-2014 That Amazing Web Ltd.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 <resources>
 
     <!--
@@ -7,37 +22,34 @@
       ~ multi select dialog
       -->
 
-    <!-- move into strings -->
     <string-array name="line_names">
-        <item>Bakerloo</item>
-        <item>Central</item>
-        <item>Circle</item>
-        <item>District</item>
-        <item>DLR</item>
-        <item>H&#8217;smith &amp; City</item>
-        <item>Jubilee</item>
-        <item>Metropolitan</item>
-        <item>Northern</item>
-        <item>Overground</item>
-        <item>Piccadilly</item>
-        <item>Victoria</item>
-        <item>W&#8217;loo &amp; City</item>
+        <item>@string/bakerloo</item>
+        <item>@string/central</item>
+        <item>@string/circle</item>
+        <item>@string/district</item>
+        <item>@string/dlr</item>
+        <item>@string/hsmith_and_city</item>
+        <item>@string/jubilee</item>
+        <item>@string/metropolitan</item>
+        <item>@string/northern</item>
+        <item>@string/overground</item>
+        <item>@string/piccadilly</item>
+        <item>@string/victoria</item>
+        <item>@string/wloo_and_city</item>
     </string-array>
     <string-array name="line_codes">
-        <item>1</item> <!-- Bakerloo -->
-        <item>2</item> <!-- Central -->
-        <item>7</item> <!-- Circle -->
-        <item>9</item> <!-- District -->
+        <item>1</item>  <!-- Bakerloo -->
+        <item>2</item>  <!-- Central -->
+        <item>7</item>  <!-- Circle -->
+        <item>9</item>  <!-- District -->
         <item>81</item> <!-- DLR -->
-        <item>8</item> <!-- Jubilee -->
-        <item>4</item> <!-- Jubilee -->
-        <item>11</item><!-- Metropolitan -->
-        <item>5</item> <!-- Northern -->
+        <item>8</item>  <!-- Hammersmith & City -->
+        <item>4</item>  <!-- Jubilee -->
+        <item>11</item> <!-- Metropolitan -->
+        <item>5</item>  <!-- Northern -->
         <item>82</item> <!-- Overground -->
-        <item>6</item> <!-- Piccadilly -->
-        <item>3</item> <!-- Victoria -->
-        <item>12</item> <!-- Waterloo & CIty -->
+        <item>6</item>  <!-- Piccadilly -->
+        <item>3</item>  <!-- Victoria -->
+        <item>12</item> <!-- Waterloo & City -->
     </string-array>
-
-    <string-array name="default_values"/>
 </resources>
