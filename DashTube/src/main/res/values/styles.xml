@@ -25,7 +25,7 @@
       ~ Common style properties for About dialog text
       -->
 
-    <style name="AboutDialogTitle">
+    <style name="DashTubeDialogTitle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
@@ -35,7 +35,7 @@
         <item name="android:layout_centerVertical">true</item>
     </style>
 
-    <style name="AboutDialogText">
+    <style name="DashTubeDialogText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingBottom">10dp</item>
