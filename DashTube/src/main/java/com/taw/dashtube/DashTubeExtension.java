@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 That Amazing Web Ltd.
+ * Copyright 2013-2014 That Amazing Web Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,8 +51,6 @@ public class DashTubeExtension extends DashClockExtension {
 
     /** Shared Preferences keys. */
     public static final String PREFERRED_LINES_PREF = "preferred_lines";
-
-
 
     /**
      * Codes to display names map - we don't output the line names as provided to us by TfL
@@ -109,15 +107,15 @@ public class DashTubeExtension extends DashClockExtension {
 
                 XmlObjectParser parser = new XmlObjectParser(new XmlNamespaceDictionary());
                 ArrayOfLineStatus result = parser.parseAndClose(rsp.getContent(), Charset.forName("UTF8"), ArrayOfLineStatus.class);
-                List<LineStatus> filteredResults = getFilteredResults(preferredLines, result);
-
-                if (filteredResults.size() > 0) {
-                    // Have some lines with issues
-                    data = populateExtensionData(R.string.status,
-                            (preferredLines != null && preferredLines.size() != 0) ? R.string.expanded_title_filtered : R.string.expanded_title,
-                            generateStatusString(filteredResults),
-                            new Intent(Intent.ACTION_VIEW,
-                                    Uri.parse(getString(R.string.tfl_tube_status_url))));
+                if (result.status != null) {
+                    List<LineStatus> filteredResults = getFilteredResults(preferredLines, result);
+                    if (filteredResults.size() > 0) {
+                        data = populateExtensionData(R.string.status,
+                                (preferredLines != null && preferredLines.size() != 0) ? R.string.expanded_title_filtered : R.string.expanded_title,
+                                generateStatusString(filteredResults),
+                                new Intent(Intent.ACTION_VIEW,
+                                        Uri.parse(getString(R.string.tfl_tube_status_url))));
+                    }
                 }
                 rsp.disconnect();
             } catch (IOException ioe) {
@@ -135,16 +133,16 @@ public class DashTubeExtension extends DashClockExtension {
     /**
      * Filters the array of LineStatus objects down to just those required
      * by the user, or all of them if no preference has been declared.
-     * @param lines The {@code Set} of lines the user wants to filter on, if any
+     * @param preferredLines The {@code Set} of lines the user wants to filter on, if any
      * @param results The original results from the LineStatus API call
      * @return Filtered {@code List} of {@code LineStatus}, if filtered, or the original list otherwise
      */
-    private List<LineStatus> getFilteredResults(Set<String> lines, ArrayOfLineStatus results) {
-        if (lines == null || lines.size() == 0) return results.status;
+    private List<LineStatus> getFilteredResults(Set<String> preferredLines, ArrayOfLineStatus results) {
+        if (preferredLines == null || preferredLines.size() == 0) return results.status;
 
         List<LineStatus> filteredResults = new ArrayList<LineStatus>();
         for (LineStatus status : results.status) {
-            if (lines.contains(status.line.id)) {
+            if (preferredLines.contains(status.line.id)) {
                 filteredResults.add(status);
             }
         }
@@ -164,6 +162,7 @@ public class DashTubeExtension extends DashClockExtension {
      * @return True if tube services are running, false otherwise.
      */
     private boolean isOperating() {
+        // TODO bug here
         Calendar now = new GregorianCalendar();
 
         // Closed on Christmas Day only
@@ -173,7 +172,7 @@ public class DashTubeExtension extends DashClockExtension {
 
         // Else check if we're inside the night closure window
         long nowMs = now.getTime().getTime();
-        return (nowMs > closureStart.getTime() && nowMs < closureEnd.getTime()) ? false : true;
+        return (!(nowMs > closureStart.getTime() && nowMs < closureEnd.getTime()));
     }
 
     /**
@@ -182,7 +181,7 @@ public class DashTubeExtension extends DashClockExtension {
      * user has opted to filter output, they will have at most 5 lines worth of info (the limit
      * dashclock places on expanded body text). If the number of {@code LineStatus} objects we
      * have is > 5, then they have not filtered, and so we will truncate output appropriately.
-     * @param lineStatuses {@code List<LineStatus} of lines to filter against
+     * @param lineStatuses {@code List<LineStatus>} of lines to filter against
      * @return {@code String} containing body text for the extension
      */
     private String generateStatusString(List<LineStatus> lineStatuses) {
@@ -201,7 +200,7 @@ public class DashTubeExtension extends DashClockExtension {
                     str += "\n";
                 }
             }
-            if (i < LINES_LIMIT && lineStatuses.size() > 5) {
+            if ((i + 1) == LINES_LIMIT && lineStatuses.size() > LINES_LIMIT) {
                 // No filtering by user; output the "x more" msg
                 str += String.format(moreStr, lineStatuses.size() - LINES_LIMIT);
                 break;
