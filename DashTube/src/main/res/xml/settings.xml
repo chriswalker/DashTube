@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2013 That Amazing Web Ltd.
+  ~ Copyright 2013-2014 That Amazing Web Ltd.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,13 +18,10 @@
     <!--
       ~ List of preferred lines to report on
       -->
-    <MultiSelectListPreference android:key="preferred_lines"
-        android:dialogTitle="@string/preferred_lines"
-        android:entries="@array/line_names"
-        android:entryValues="@array/line_codes"
+    <com.taw.dashtube.LimitedMultiSelectDialogPreference android:key="preferred_lines"
+        android:dialogTitle="@string/preferred_lines_dialog_title"
         android:title="@string/preferred_lines"
-        android:defaultValue="@array/default_values"
-        android:summary="@string/preferred_summary_none_selected"/>
+        android:summary="@string/preferred_summary_none_selected" />
 
     <!--
       ~ Support category - rate link, email
