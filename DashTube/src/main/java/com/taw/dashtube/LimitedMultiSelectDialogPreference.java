@@ -59,7 +59,7 @@ public class LimitedMultiSelectDialogPreference extends DialogPreference {
     Set<String> selectedValues = new HashSet<String>();
 
     /** Limit for lines that can be selected. */
-    private static final int PREFERRED_LINES_LIMIT = 5;
+    private static final int FAVOURITE_LINES_LIMIT = 5;
 
     public LimitedMultiSelectDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -95,7 +95,7 @@ public class LimitedMultiSelectDialogPreference extends DialogPreference {
         if (positiveResult) {
             // persistStringSet() is not public yet, so have to resort to this instead
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-            editor.putStringSet(DashTubeExtension.PREFERRED_LINES_PREF, adapter.getSelectedValues());
+            editor.putStringSet(DashTubeExtension.FAVOURITE_LINES_PREF, adapter.getSelectedValues());
             editor.commit();
         }
 
@@ -142,7 +142,7 @@ public class LimitedMultiSelectDialogPreference extends DialogPreference {
     private ArrayList<TubeLine> generateAdapterData() {
         if (selectedValues.size() == 0) {
             // First show of dialog - get them from shared prefs
-            selectedValues.addAll(PreferenceManager.getDefaultSharedPreferences(context).getStringSet(DashTubeExtension.PREFERRED_LINES_PREF, new HashSet<String>()));
+            selectedValues.addAll(PreferenceManager.getDefaultSharedPreferences(context).getStringSet(DashTubeExtension.FAVOURITE_LINES_PREF, new HashSet<String>()));
         }
 
         ArrayList<TubeLine> tubeLines = new ArrayList<TubeLine>();
@@ -154,7 +154,7 @@ public class LimitedMultiSelectDialogPreference extends DialogPreference {
             if (selectedValues.contains(tubeLine.code)) {
                 tubeLine.checked = true;
             }
-            if (selectedValues.size() == PREFERRED_LINES_LIMIT && !tubeLine.checked) {
+            if (selectedValues.size() == FAVOURITE_LINES_LIMIT && !tubeLine.checked) {
                 tubeLine.enabled = false;
             }
             tubeLines.add(tubeLine);
@@ -187,7 +187,7 @@ public class LimitedMultiSelectDialogPreference extends DialogPreference {
             inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             numberSelected = getSelectedValues().size();
-            if (numberSelected == PREFERRED_LINES_LIMIT) {
+            if (numberSelected == FAVOURITE_LINES_LIMIT) {
                 viewsDisabled = true;
             }
         }
@@ -235,9 +235,9 @@ public class LimitedMultiSelectDialogPreference extends DialogPreference {
                         numberSelected--;
                     }
 
-                    if (numberSelected == PREFERRED_LINES_LIMIT) {
+                    if (numberSelected == FAVOURITE_LINES_LIMIT) {
                         disableUncheckedLines();
-                    } else if (numberSelected < PREFERRED_LINES_LIMIT && viewsDisabled) {
+                    } else if (numberSelected < FAVOURITE_LINES_LIMIT && viewsDisabled) {
                         enableUncheckedLines();
                     }
                 }

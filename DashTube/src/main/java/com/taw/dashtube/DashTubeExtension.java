@@ -50,7 +50,7 @@ public class DashTubeExtension extends DashClockExtension {
     private Date closureEnd;
 
     /** Shared Preferences keys. */
-    public static final String PREFERRED_LINES_PREF = "preferred_lines";
+    public static final String FAVOURITE_LINES_PREF = "favourite_lines";
 
     /**
      * Codes to display names map - we don't output the line names as provided to us by TfL
@@ -90,7 +90,7 @@ public class DashTubeExtension extends DashClockExtension {
      */
     @Override
     protected void onUpdateData(int reason) {
-        Set<String> preferredLines =  PreferenceManager.getDefaultSharedPreferences(this).getStringSet(PREFERRED_LINES_PREF, null);
+        Set<String> preferredLines =  PreferenceManager.getDefaultSharedPreferences(this).getStringSet(FAVOURITE_LINES_PREF, null);
 
         ExtensionData data = new ExtensionData();
         if (isOperating()) {

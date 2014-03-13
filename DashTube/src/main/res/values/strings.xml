@@ -63,9 +63,9 @@
       -->
     <string name="settings_title">DashTube Settings</string>
 
-    <string name="preferred_lines">Check specific lines</string>
-    <string name="preferred_lines_dialog_title">Select up to five lines</string>
-    <string name="preferred_summary_none_selected">All underground lines</string>
+    <string name="favourite_lines">Favourite lines</string>
+    <string name="favourite_lines_dialog_title">Select up to five lines</string>
+    <string name="favourite_lines_summary_none_selected">None set - reporting on all underground lines</string>
 
     <string name="support_category">Support</string>
 
@@ -107,8 +107,8 @@
     <string name="changelog_dialog_text">
         <![CDATA[
         <b>v1.1.0</b><br/>
-        &#x2022; Added preferences to allow filtering of up to five tube lines<br/>
-        &#x2022; Fixed bug in DashTube that meant line status was checked when tube is closed overnight<br/>
+        &#x2022; Added preferences to allow up to five tube lines to be selected as favourites. DashTube will only report on favourite lines, if set.<br/>
+        &#x2022; Fixed bug in DashTube that meant line status was checked when tube is closed overnight.<br/>
         <br/>
         <b>v1.0.0</b><br/>
         &#x2022; Initial release

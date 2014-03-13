@@ -44,7 +44,7 @@ public class DashTubeSettingsActivity extends PreferenceActivity implements Shar
 
         // Force an update of the summary straight away
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
-        onSharedPreferenceChanged(PreferenceManager.getDefaultSharedPreferences(this), DashTubeExtension.PREFERRED_LINES_PREF);
+        onSharedPreferenceChanged(PreferenceManager.getDefaultSharedPreferences(this), DashTubeExtension.FAVOURITE_LINES_PREF);
     }
 
     @Override
@@ -76,11 +76,11 @@ public class DashTubeSettingsActivity extends PreferenceActivity implements Shar
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(DashTubeExtension.PREFERRED_LINES_PREF)) {
+        if (key.equals(DashTubeExtension.FAVOURITE_LINES_PREF)) {
             Set<String> selections = (Set<String>) sharedPreferences.getStringSet(key, new HashSet<String>());
             List<String> sortedNames = new ArrayList<String>();
 
-            Preference preference = findPreference(DashTubeExtension.PREFERRED_LINES_PREF);
+            Preference preference = findPreference(DashTubeExtension.FAVOURITE_LINES_PREF);
 
             if (selections.size() > 0) {
                 // Translate the selected IDs into strings first, so we can sort
@@ -91,7 +91,7 @@ public class DashTubeSettingsActivity extends PreferenceActivity implements Shar
                 String summary = TextUtils.join(", ", sortedNames);
                 preference.setSummary(summary);
             } else {
-                preference.setSummary(preference.getContext().getString(R.string.preferred_summary_none_selected));
+                preference.setSummary(preference.getContext().getString(R.string.favourite_lines_summary_none_selected));
             }
         }
     }

@@ -18,10 +18,10 @@
     <!--
       ~ List of preferred lines to report on
       -->
-    <com.taw.dashtube.LimitedMultiSelectDialogPreference android:key="preferred_lines"
-        android:dialogTitle="@string/preferred_lines_dialog_title"
-        android:title="@string/preferred_lines"
-        android:summary="@string/preferred_summary_none_selected" />
+    <com.taw.dashtube.LimitedMultiSelectDialogPreference android:key="favourite_lines"
+        android:dialogTitle="@string/favourite_lines_dialog_title"
+        android:title="@string/favourite_lines"
+        android:summary="@string/favourite_lines_summary_none_selected" />
 
     <!--
       ~ Support category - rate link, email
