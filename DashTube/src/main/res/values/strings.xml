@@ -107,7 +107,7 @@
     <string name="changelog_dialog_text">
         <![CDATA[
         <b>v1.1.0</b><br/>
-        &#x2022; Added preferences to allow up to five tube lines to be selected as favourites. DashTube will only report on favourite lines, if set.<br/>
+        &#x2022; You can now select up to five tube lines for DashTube to check on, instead of defaulting to all lines<br />
         &#x2022; Fixed bug in DashTube that meant line status was checked when tube is closed overnight.<br/>
         <br/>
         <b>v1.0.0</b><br/>
