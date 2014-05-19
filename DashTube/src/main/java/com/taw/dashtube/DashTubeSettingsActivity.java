@@ -17,7 +17,6 @@
 package com.taw.dashtube;
 
 import android.app.DialogFragment;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -25,26 +24,26 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.taw.dashtube.model.Tube;
 
 import java.util.*;
 
 /**
  * Preferences activity.
  */
-public class DashTubeSettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class DashTubeSettingsActivity extends PreferenceActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addPreferencesFromResource(R.xml.settings);
-
-        // Show the Home As Up
         getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
-        // Force an update of the summary straight away
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
-        onSharedPreferenceChanged(PreferenceManager.getDefaultSharedPreferences(this), DashTubeExtension.FAVOURITE_LINES_PREF);
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        setupPreferences();
     }
 
     @Override
@@ -74,25 +73,47 @@ public class DashTubeSettingsActivity extends PreferenceActivity implements Shar
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(DashTubeExtension.FAVOURITE_LINES_PREF)) {
-            Set<String> selections = (Set<String>) sharedPreferences.getStringSet(key, new HashSet<String>());
-            List<String> sortedNames = new ArrayList<String>();
+    /**
+     * Initialise the preferences activity from XML, and also bind the on change listener to
+     * the various preferences.
+     */
+    private void setupPreferences() {
+        addPreferencesFromResource(R.xml.settings);
 
-            Preference preference = findPreference(DashTubeExtension.FAVOURITE_LINES_PREF);
-
-            if (selections.size() > 0) {
-                // Translate the selected IDs into strings first, so we can sort
-                for (String selection : selections) {
-                    sortedNames.add(DashTubeExtension.LINE_MAP.get(selection));
-                }
-                Collections.sort(sortedNames, String.CASE_INSENSITIVE_ORDER);
-                String summary = TextUtils.join(", ", sortedNames);
-                preference.setSummary(summary);
-            } else {
-                preference.setSummary(preference.getContext().getString(R.string.favourite_lines_summary_none_selected));
-            }
-        }
+        Preference favourites = findPreference(DashTubeExtension.FAVOURITE_LINES_PREF);
+        favourites.setOnPreferenceChangeListener(listener);
+        listener.onPreferenceChange(favourites,
+                PreferenceManager
+                        .getDefaultSharedPreferences(favourites.getContext())
+                        .getStringSet(favourites.getKey(), new HashSet<String>()));
     }
+
+    /**
+     * A preference value change listener that updates the preference's summary to reflect its new
+     * value.
+     */
+    private static Preference.OnPreferenceChangeListener listener = new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object value) {
+
+            if (preference instanceof LimitedMultiSelectDialogPreference) {
+                Set<String> selections = (Set<String>) value;
+                List<String> sortedNames = new ArrayList<String>();
+
+                if (selections.size() > 0) {
+                    // Translate the selected IDs into strings first, so we can sort
+                    for (String selection : selections) {
+                        sortedNames.add(Tube.LINE_MAP.get(selection).getName());
+                    }
+                    Collections.sort(sortedNames, String.CASE_INSENSITIVE_ORDER);
+                    String summary = TextUtils.join(", ", sortedNames);
+                    preference.setSummary(summary);
+                } else {
+                    preference.setSummary(preference.getContext().getString(R.string.favourite_lines_summary_none_selected));
+                }
+            }
+
+            return true;
+        }
+    };
 }
