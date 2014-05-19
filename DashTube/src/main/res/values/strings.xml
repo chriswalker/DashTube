@@ -16,7 +16,7 @@
 
 <resources>
     <string name="app_name">DashTube</string>
-    <string name="app_version">v1.1.0</string>
+    <string name="app_version">v1.2.0</string>
 
     <!-- URL for click intent -->
     <string name="tfl_tube_status_url">http://www.tfl.gov.uk/tfl/livetravelnews/realtime/tube/default.html</string>
@@ -41,7 +41,8 @@
 
     <!-- If connectivity is a problem -->
     <string name="error_status">&#x2014;</string>
-    <string name="error_expanded_body">Could not retrieve line status</string>
+    <string name="error_request_expanded_body">Could not retrieve line status</string>
+    <string name="error_parsing_expanded_body">Could not process line status response</string>
 
     <!-- Display string for tube names; used in the string array resources, and also in the Preferences activity -->
     <string name="bakerloo">Bakerloo</string>
@@ -57,6 +58,11 @@
     <string name="piccadilly">Piccadilly</string>
     <string name="victoria">Victoria</string>
     <string name="wloo_and_city">W&#8217;loo &amp; City</string>
+
+    <!--
+      ~ Detail activity strings
+      -->
+    <string name="updated_at">Updated at %1$s</string>
 
     <!--
       ~ Settings activity strings
@@ -79,19 +85,16 @@
     <!-- For the email intent -->
     <string name="email_address">mailto:thatamazingweb@gmail.com</string>
 
-    <!--
-      ~  Menu strings
-      -->
-    <string name="menu_about">About</string>
-    <string name="menu_changelog">Changelog</string>
+    <!-- Also used for menu strings -->
+    <string name="about_dashtube">About DashTube</string>
+    <string name="dashtube_changelog">Changelog</string>
 
     <!--
       ~ About dialog box
       -->
     <string name="about_dialog_text">
         <![CDATA[
-        &#xa9; That Amazing Web Ltd. 2014.<br/>
-        All Rights Reserved.<br/><br/>
+        &#xa9; That Amazing Web Ltd. 2014. All Rights Reserved.<br/><br/>
         DashTube uses the following libraries:<br/><br/>
         &#x2022; <a href="https://code.google.com/p/google-http-java-client/">Google HTTP Client Library for Java</a><br/>
         &#x2022; <a href="https://code.google.com/p/google-api-java-client/">Google APIs Client Library for Java</a>
@@ -106,13 +109,22 @@
     <string name="changelog">Changelog</string>
     <string name="changelog_dialog_text">
         <![CDATA[
+        <b>v1.2.0</b><br/>
+        &#x2022; Tapping on the extension in DashClock opens up a more detailed view instead of opening up a browser at the TfL status page<br/>
+        &#x2022; Fixed occasional parsing bug with TfL feed<br/>
         <b>v1.1.0</b><br/>
-        &#x2022; You can now select up to five tube lines for DashTube to check on, instead of defaulting to all lines<br />
-        &#x2022; Fixed bug in DashTube that meant line status was checked when tube is closed overnight.<br/>
+        &#x2022; You can now select up to five tube lines for DashTube to check on, instead of defaulting to all lines<br/>
+        &#x2022; Fixed bug in DashTube that meant line status was checked when tube is closed overnight<br/>
         <br/>
         <b>v1.0.0</b><br/>
         &#x2022; Initial release
         ]]>
     </string>
+
+    <!--
+      ~ TimePreference
+      -->
+    <string name="set_button">Set</string>
+    <string name="cancel_button">Cancel</string>
 
 </resources>
