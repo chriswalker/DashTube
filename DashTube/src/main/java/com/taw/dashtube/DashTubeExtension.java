@@ -17,8 +17,8 @@
 package com.taw.dashtube;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.text.format.DateFormat;
 import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
 import com.google.api.client.http.GenericUrl;
@@ -26,13 +26,11 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.xml.XmlNamespaceDictionary;
-import com.google.api.client.xml.XmlObjectParser;
 import com.taw.dashtube.model.ArrayOfLineStatus;
 import com.taw.dashtube.model.LineStatus;
+import com.taw.dashtube.model.Tube;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -41,46 +39,35 @@ import java.util.*;
 public class DashTubeExtension extends DashClockExtension {
     /** Logging tag. */
     private static final String TAG = "DashTube";
+
     /** How many lines to output before we truncate output and display the more info msg. */
     private static final int LINES_LIMIT = 4;
 
     /** Start time of tube services. */
-    private Date closureStart;
+    private GregorianCalendar closureStart;
     /** End time of tube services. */
-    private Date closureEnd;
+    private GregorianCalendar closureEnd;
 
     /** Shared Preferences keys. */
     public static final String FAVOURITE_LINES_PREF = "favourite_lines";
 
-    /**
-     * Codes to display names map - we don't output the line names as provided to us by TfL
-     * in the feed, as these are occasionally too long (e.g. 'Hammersmith and City'), so
-     * this map provides line IDs to display names.
-     */
-    public static Map<String, String> LINE_MAP;
+    /** Key for the XML  we pass to the on-tap intent. */
+    public static final String TUBE_STATUS_XML = "com.taw.dashtube.TubeStatusXML";
+    /** Key for the status timestamp, also passed to the on-tap intent. */
+    public static final String TUBE_STATUS_TIMESTAMP = "com.taw.dashtube.TubeStatusTimestamp";
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        String[] names = getResources().getStringArray(R.array.line_names);
-        String[] codes = getResources().getStringArray(R.array.line_codes);
-
-        LINE_MAP = new HashMap<String, String>();
-        for (int i = 0; i < codes.length; i ++) {
-            LINE_MAP.put(codes[i], names[i]);
-        }
-
         // Set tube closure hours (approximate values) in UTC
-        Calendar start = new GregorianCalendar();
-        start.set(Calendar.HOUR_OF_DAY, 1);
-        start.set(Calendar.MINUTE, 30);
-        closureStart = start.getTime();
+        closureStart = new GregorianCalendar();
+        closureStart.set(Calendar.HOUR_OF_DAY, 1);
+        closureStart.set(Calendar.MINUTE, 30);
 
-        Calendar end = new GregorianCalendar();
-        end.set(Calendar.HOUR_OF_DAY, 4);
-        end.set(Calendar.MINUTE, 45);
-        closureEnd = end.getTime();
+        closureEnd = new GregorianCalendar();
+        closureEnd.set(Calendar.HOUR_OF_DAY, 4);
+        closureEnd.set(Calendar.MINUTE, 45);
     }
 
     /**
@@ -90,39 +77,23 @@ public class DashTubeExtension extends DashClockExtension {
      */
     @Override
     protected void onUpdateData(int reason) {
-        Set<String> preferredLines =  PreferenceManager.getDefaultSharedPreferences(this).getStringSet(FAVOURITE_LINES_PREF, null);
 
         ExtensionData data = new ExtensionData();
-        if (isOperating()) {
+        if (shouldGetUpdates()) {
             try {
                 GenericUrl url = new GenericUrl(getString(R.string.line_status_api_url));
 
                 HttpTransport transport = new NetHttpTransport();
                 HttpRequest req = transport.createRequestFactory().buildGetRequest(url);
 
-                // Workaround - can't seem to force XmlObjectParser to use UTF-8 and
-                // ignore the BOM that gets sent by the TfL feed. Do it the long way
-                // around and specify the XML parser outside of the request object.
                 HttpResponse rsp = req.execute();
-
-                XmlObjectParser parser = new XmlObjectParser(new XmlNamespaceDictionary());
-                ArrayOfLineStatus result = parser.parseAndClose(rsp.getContent(), Charset.forName("UTF8"), ArrayOfLineStatus.class);
-                if (result.status != null) {
-                    List<LineStatus> filteredResults = getFilteredResults(preferredLines, result);
-                    if (filteredResults.size() > 0) {
-                        data = populateExtensionData(R.string.status,
-                                (preferredLines != null && preferredLines.size() != 0) ? R.string.expanded_title_filtered : R.string.expanded_title,
-                                generateStatusString(filteredResults),
-                                new Intent(Intent.ACTION_VIEW,
-                                        Uri.parse(getString(R.string.tfl_tube_status_url))));
-                    }
-                }
+                data = processResponse(rsp);
                 rsp.disconnect();
             } catch (IOException ioe) {
-                // Any kind of error, display the error status/body
+                // Some kind of connection issue
                 data = populateExtensionData(R.string.error_status,
                         R.string.error_status,
-                        getString(R.string.error_expanded_body),
+                        getString(R.string.error_request_expanded_body),
                         null);
             }
         }
@@ -131,48 +102,69 @@ public class DashTubeExtension extends DashClockExtension {
     }
 
     /**
-     * Filters the array of LineStatus objects down to just those required
-     * by the user, or all of them if no preference has been declared.
-     * @param preferredLines The {@code Set} of lines the user wants to filter on, if any
-     * @param results The original results from the LineStatus API call
-     * @return Filtered {@code List} of {@code LineStatus}, if filtered, or the original list otherwise
+     * Process the response, generating a populated {@code ExtensionData} object as appropriate.
+     *
+     * @param rsp the response from the status request
+     * @return a popualted {@code ExtensionData} ready for publication
      */
-    private List<LineStatus> getFilteredResults(Set<String> preferredLines, ArrayOfLineStatus results) {
-        if (preferredLines == null || preferredLines.size() == 0) return results.status;
+    private ExtensionData processResponse(HttpResponse rsp) throws IOException {
+        ExtensionData data = null;
 
-        List<LineStatus> filteredResults = new ArrayList<LineStatus>();
-        for (LineStatus status : results.status) {
-            if (preferredLines.contains(status.line.id)) {
-                filteredResults.add(status);
+        // Convert response into string - we'll send the full XML string as an extra in the on-tap
+        // intent; we need to do this as DashClock does not support passing parcelables/
+        // serializables in intents. Note we substring here to remove the BOM that's handily sent in
+        // the response from TfL.
+        String xml = rsp.parseAsString().substring(3);
+
+        ArrayOfLineStatus result = DashTubeUtils.parseTubeLineStatusResponse(xml);
+
+        if (result != null && result.status != null) {
+            ArrayList<LineStatus> filteredResults = DashTubeUtils.getFilteredResults(this, result);
+
+            if (filteredResults.size() > 0) {
+                Intent i = new Intent(this, DetailActivity.class);
+                i.putExtra(TUBE_STATUS_XML, xml);
+                i.putExtra(TUBE_STATUS_TIMESTAMP, DateFormat.getTimeFormat(this).format(new Date()));
+
+                Set<String> preferredLines =  PreferenceManager.getDefaultSharedPreferences(this).getStringSet(FAVOURITE_LINES_PREF, null);
+                data = populateExtensionData(R.string.status,
+                        (preferredLines != null && preferredLines.size() != 0) ? R.string.expanded_title_filtered : R.string.expanded_title,
+                        generateStatusString(filteredResults, preferredLines),
+                        i);
             }
+        } else if (result == null) {
+            // We had some kind of parsing issue; logged elsewhere
+            data = populateExtensionData(R.string.error_status,
+                    R.string.error_status,
+                    getString(R.string.error_parsing_expanded_body),
+                    null);
         }
 
-        return filteredResults;
+        return data;
     }
 
     /**
-     * Determines whether the service is actually operating given the published
-     * operating hours and days (the tube does not run on 25th December). First and
-     * last train times vary widely between lines; we block out 0130 - 0445 and
-     * return false if the device time falls within this period. This means we should
-     * avoid most "Planned Closure" statuses for anybody checking status overnight.
+     * Determine whether to get status updates based on:
+     * 1) Whether it's December 25th - Tube is closed this day only
+     * 2) It's during the night closure period
      *
-     * Device time is converted to UTC and checked to see if it falls between
-     * {@code closureStart} and {@code closureEnd}
-     * @return True if tube services are running, false otherwise.
+     * @return True if updates should be retrieve, false otherwise
      */
-    private boolean isOperating() {
-        // TODO bug here
-        Calendar now = new GregorianCalendar();
+    private boolean shouldGetUpdates() {
+        Calendar now = Calendar.getInstance();
 
         // Closed on Christmas Day only
         if ((now.get(Calendar.DAY_OF_MONTH) == 25) && (now.get(Calendar.MONTH) == Calendar.DECEMBER)) {
             return false;
         }
 
-        // Else check if we're inside the night closure window
-        long nowMs = now.getTime().getTime();
-        return (!(nowMs > closureStart.getTime() && nowMs < closureEnd.getTime()));
+        // Else check if we're inside the night closure window. We need ms since midnight for the current date.
+        long nowMs = now.getTimeInMillis() % (24 * 60 * 60 * 1000);
+        if (nowMs > closureStart.getTimeInMillis() && nowMs < closureEnd.getTimeInMillis()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -181,10 +173,12 @@ public class DashTubeExtension extends DashClockExtension {
      * user has opted to filter output, they will have at most 5 lines worth of info (the limit
      * dashclock places on expanded body text). If the number of {@code LineStatus} objects we
      * have is > 5, then they have not filtered, and so we will truncate output appropriately.
+     *
      * @param lineStatuses {@code List<LineStatus>} of lines to filter against
+     * @param preferredLines any favourites set by the user
      * @return {@code String} containing body text for the extension
      */
-    private String generateStatusString(List<LineStatus> lineStatuses) {
+    private String generateStatusString(List<LineStatus> lineStatuses, Set<String> preferredLines) {
         String moreStr = getString(R.string.more_lines);
         String statusStr = getString(R.string.line_status);
 
@@ -195,15 +189,17 @@ public class DashTubeExtension extends DashClockExtension {
         for (int i = 0; i < lineStatuses.size(); i ++) {
             lineStatus = lineStatuses.get(i);
             if (lineStatus.status.isActive) {
-                str += String.format(statusStr, LINE_MAP.get(lineStatus.line.id), lineStatus.status.description);
+                str += String.format(statusStr, Tube.LINE_MAP.get(lineStatus.line.id).getName(), lineStatus.status.description);
                 if (i != (lineStatuses.size() - 1)) {
                     str += "\n";
                 }
             }
-            if ((i + 1) == LINES_LIMIT && lineStatuses.size() > LINES_LIMIT) {
-                // No filtering by user; output the "x more" msg
-                str += String.format(moreStr, lineStatuses.size() - LINES_LIMIT);
-                break;
+            if (preferredLines == null || preferredLines.size() == 0) {
+                if ((i + 1) == LINES_LIMIT && lineStatuses.size() > LINES_LIMIT) {
+                    // No filtering by user; output the "x more" msg
+                    str += String.format(moreStr, lineStatuses.size() - LINES_LIMIT);
+                    break;
+                }
             }
         }
 
@@ -213,6 +209,7 @@ public class DashTubeExtension extends DashClockExtension {
     /**
      * Generate an ExtensionData object ready to be published back to the main DashClock
      * process.
+     *
      * @param status Resource ID of the status string to use
      * @param title Resource ID of the title string to use
      * @param body String containing body text to use
@@ -232,4 +229,5 @@ public class DashTubeExtension extends DashClockExtension {
 
         return data;
     }
+
 }
