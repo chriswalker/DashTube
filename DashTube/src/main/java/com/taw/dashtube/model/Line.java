@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 That Amazing Web Ltd.
+ * Copyright 2013-2014 That Amazing Web Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,11 @@
 package com.taw.dashtube.model;
 
 import com.google.api.client.util.Key;
-import com.google.api.client.xml.GenericXml;
 
 /**
- * Simple class encapsulating the &lt;Line&gt; element.
+ * Simple class encapsulating the {@code Line} element.
  */
-public class Line extends GenericXml {
+public class Line {
     @Key("@ID")
     public String id;
     @Key("@Name")

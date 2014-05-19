@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 That Amazing Web Ltd.
+ * Copyright 2013-2014 That Amazing Web Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,13 @@
 package com.taw.dashtube.model;
 
 import com.google.api.client.util.Key;
-import com.google.api.client.xml.GenericXml;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
- * Simple class encapsulating the &lt;ArrayOfLineStatus&gt; element.
+ * Simple class encapsulating the {@code ArrayOfLineStatus} element.
  */
-public class ArrayOfLineStatus extends GenericXml {
+public class ArrayOfLineStatus {
     @Key("LineStatus")
-    public List<LineStatus> status;
+    public ArrayList<LineStatus> status;
 }
