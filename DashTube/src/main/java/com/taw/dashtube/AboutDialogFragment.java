@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 That Amazing Web Ltd.
+ * Copyright 2013-2014 That Amazing Web Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,16 +42,14 @@ public class AboutDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View titleView = View.inflate(getActivity(), R.layout.about_dialog_title_view, null);
         View bodyView = View.inflate(getActivity(), R.layout.about_dialog_view, null);
 
-        // Set up strings for URLs
         TextView txt = (TextView) bodyView.findViewById(R.id.about_dialog_text);
         txt.setText(Html.fromHtml(getString(R.string.about_dialog_text)));
         txt.setMovementMethod(LinkMovementMethod.getInstance());
 
         return new AlertDialog.Builder(getActivity())
-                .setCustomTitle(titleView)
+                .setTitle(R.string.about_dashtube)
                 .setView(bodyView)
                 .setPositiveButton(getString(R.string.ok_button),
                         new DialogInterface.OnClickListener() {
@@ -61,4 +59,4 @@ public class AboutDialogFragment extends DialogFragment {
                         })
                 .create();
     }
-};
+}

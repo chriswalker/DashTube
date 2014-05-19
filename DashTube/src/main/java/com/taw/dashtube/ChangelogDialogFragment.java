@@ -41,15 +41,12 @@ public class ChangelogDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View titleView = View.inflate(getActivity(), R.layout.changelog_dialog_title_view, null);
         View bodyView = View.inflate(getActivity(), R.layout.changelog_dialog_view, null);
-
-        // Set up strings for URLs
         TextView txt = (TextView) bodyView.findViewById(R.id.changelog_dialog_text);
         txt.setText(Html.fromHtml(getString(R.string.changelog_dialog_text)));
 
         return new AlertDialog.Builder(getActivity())
-                .setCustomTitle(titleView)
+                .setTitle(R.string.dashtube_changelog)
                 .setView(bodyView)
                 .setPositiveButton(getString(R.string.ok_button),
                         new DialogInterface.OnClickListener() {
