@@ -48,7 +48,6 @@ public class LimitedMultiSelectDialogPreference extends DialogPreference {
 
     private TubeLineAdapter adapter;
 
-    // TODO refactor -> move into adapter?
     private String[] lineCodes;
     private String[] lineNames;
 
@@ -66,6 +65,7 @@ public class LimitedMultiSelectDialogPreference extends DialogPreference {
 
         this.context = context;
 
+        // TODO: references array XML here, but Tube enum elsewhere; will consolidate
         lineNames = context.getResources().getStringArray(R.array.line_names);
         lineCodes = context.getResources().getStringArray(R.array.line_codes);
 
@@ -81,7 +81,6 @@ public class LimitedMultiSelectDialogPreference extends DialogPreference {
         ListView listView = new ListView(context);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-//        adapter = new TubeLineAdapter(context, android.R.layout.simple_list_item_multiple_choice, generateAdapterData());
         adapter = new TubeLineAdapter(context, R.layout.tube_line_item, generateAdapterData());
 
         listView.setAdapter(adapter);
@@ -93,10 +92,13 @@ public class LimitedMultiSelectDialogPreference extends DialogPreference {
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
         if (positiveResult) {
-            // persistStringSet() is not public yet, so have to resort to this instead
-            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-            editor.putStringSet(DashTubeExtension.FAVOURITE_LINES_PREF, adapter.getSelectedValues());
-            editor.commit();
+            Set<String> selections = adapter.getSelectedValues();
+            if (callChangeListener(selections)) {
+                // persistStringSet() is not public yet, so have to resort to this instead
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+                editor.putStringSet(DashTubeExtension.FAVOURITE_LINES_PREF, selections);
+                editor.commit();
+            }
         }
 
         selectedValues.clear();
@@ -111,7 +113,6 @@ public class LimitedMultiSelectDialogPreference extends DialogPreference {
         }
 
         final SavedState myState = new SavedState(superState);
-        //myState.values = adapter.getSelectedValues();
         myState.values.addAll(selectedValues);
 
         return myState;
@@ -199,10 +200,7 @@ public class LimitedMultiSelectDialogPreference extends DialogPreference {
             ViewHolder holder;
 
             if (convertView == null) {
-
                 convertView = inflater.inflate(R.layout.tube_line_item, parent, false);
-//                int res = getLayoutResource();
-//                convertView = inflater.inflate(getLayoutResource(), parent, false);
 
                 holder = new ViewHolder();
                 holder.text = (TextView) convertView.findViewById(R.id.line_name);
@@ -220,7 +218,7 @@ public class LimitedMultiSelectDialogPreference extends DialogPreference {
             holder.checkBox.setChecked(tubeLine.checked);
             holder.checkBox.setEnabled(tubeLine.enabled);
 
-            // TODO - move onclick listener out, as recreated multiple times
+            // TODO - move onclick listener out, as recreated multiple times?
             holder.checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -282,6 +280,7 @@ public class LimitedMultiSelectDialogPreference extends DialogPreference {
 
         /**
          * Return a {@code Set<String>} of the selected options. Codes are stored in the Set.
+         *
          * @return {@code Set} containing line IDs of all selected options
          */
         public Set<String> getSelectedValues() {
