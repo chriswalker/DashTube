@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2013 That Amazing Web Ltd.
+  ~ Copyright 2013-2014 That Amazing Web Ltd.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -13,28 +13,32 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <!--
+      ~ Base application theme
+      -->
+    <style name="TawTheme" parent="android:Theme.Holo.Light.DarkActionBar">
     </style>
 
     <!--
-      ~ Common style properties for About dialog text
+      ~ Text styling for the details activity
       -->
-
-    <style name="DashTubeDialogTitle">
-        <item name="android:layout_width">wrap_content</item>
+    <style name="DashTubeDetailTitleText">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+        <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">sans-serif-condensed</item>
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:layout_centerVertical">true</item>
+        <!-- No colour specified, as set in the Detail Activity based on TfL branding -->
     </style>
 
+    <style name="DashTubeDetailDescriptionText" parent="DashTubeDetailTitleText">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textColor">@android:color/secondary_text_light</item>
+    </style>
+
+    <!--
+      ~ Text styling for changelog/about dialog boxes
+      -->
     <style name="DashTubeDialogText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -42,4 +46,6 @@
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
+
+
 </resources>
