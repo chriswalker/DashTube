@@ -5,6 +5,6 @@
 
 -keepattributes Signature,RuntimeVisibleAnnotations,AnnotationDefault
 
-# Make sure we leave anything extending GenericXml untouched, in order to
-# preserve empty constructors
--keep public class * extends com.google.api.client.xml.GenericXml
+# Make sure we leave anything in com.taw.dashtube.model untouched, to preserve
+# empty constructors
+-keep public class com.taw.dashtube.model.*
