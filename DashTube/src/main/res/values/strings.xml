@@ -111,7 +111,7 @@
         <![CDATA[
         <b>v1.2.0</b><br/>
         &#x2022; Tapping on the extension in DashClock opens up a more detailed view instead of opening up a browser at the TfL status page<br/>
-        &#x2022; Fixed occasional parsing bug with TfL feed<br/>
+        &#x2022; Tightened up parsing code; DashTube now reports problems processing the TfL feed instead of a generic server error<br/>
         <b>v1.1.0</b><br/>
         &#x2022; You can now select up to five tube lines for DashTube to check on, instead of defaulting to all lines<br/>
         &#x2022; Fixed bug in DashTube that meant line status was checked when tube is closed overnight<br/>
