@@ -148,7 +148,7 @@ public class DashTubeExtension extends DashClockExtension {
      * 1) Whether it's December 25th - Tube is closed this day only
      * 2) It's during the night closure period
      *
-     * @return True if updates should be retrieve, false otherwise
+     * @return True if updates should be retrieved, false otherwise
      */
     private boolean shouldGetUpdates() {
         Calendar now = Calendar.getInstance();
